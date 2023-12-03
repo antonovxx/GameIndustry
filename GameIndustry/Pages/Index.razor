@@ -1,7 +1,83 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div class="row">
+    <div class="col text-center">
+        <h1>Welcome to our Game Industry Page!</h1>
+    </div>
+</div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="row">
+    <div class="col text-center">
+        <h2>Show all games in mock database:</h2>
+    </div>
+</div>
+
+<GameListTable Games="_games"></GameListTable>
+
+<IndividualGame Game="_oneGameToShow" IsTable="false" DisplayButtons="true" SwitchGame="ShowNewGame"></IndividualGame>
+
+@code 
+{
+    private List<Game> _games;
+    private Random _random;
+    private Game _oneGameToShow;
+    
+    protected override void OnInitialized()
+    {
+        _games = new List<Game>()
+        {
+            new Game()
+            {
+                Name = "Farming Simulatior 2019",
+                Genre = "Simulator",
+                ReleaseDate = new DateTime(2018, 11, 19),
+            },
+            new Game()
+            {
+                Name = "The Witcher 3",
+                Genre = "Action/RPG",
+                ReleaseDate = new DateTime(2015, 05, 18),
+            },
+            new Game()
+            {
+                Name = "Destroy all humans",
+                Genre = "Action/Adventure",
+                ReleaseDate = new DateTime(2020, 07, 28),
+            },
+        };
+
+        _random = new Random(DateTime.Now.Millisecond);
+        _oneGameToShow = _games[_random.Next(0, _games.Count)];
+    }
+
+    private void ShowNewGame()
+    {
+        _oneGameToShow = SwitchGame();
+    }
+
+    private Game SwitchGame()
+    {
+        Game tempGame;
+
+        if (_games.Count >= 2)
+        {
+            var iterator = _random.Next(0, _games.Count);
+            tempGame = _games[iterator];
+        }
+        else if (_games.Count == 1)
+        {
+            tempGame = _games[0];
+        }
+        else
+        {
+            return new Game()
+            {
+                Name = "No items in the array",
+                ReleaseDate = DateTime.Now,
+            };
+        }
+
+        return tempGame;
+    }
+}

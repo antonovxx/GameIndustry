@@ -1,5 +1,57 @@
-<h3>GameListTable</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+
+        <thead class="thead-light">
+        <tr>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Release Date</th>
+            <th>
+                <input type="checkbox" @bind="_displayButtons">
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @if (Games is null)
+        {
+            <tr>LOADING DATA...</tr>
+        }
+        else if (Games.Count == 0)
+        {
+            <tr>NO ITEMS IN THE ARRAY</tr>
+        }
+        else
+        {
+            @foreach (var game in Games)
+            {
+                <IndividualGame 
+                    Game="game"
+                    IsTable="true" 
+                    DisplayButtons="_displayButtons"
+                    DeleteGame="DeleteGame"/>
+                
+                @* <tr> *@
+                @*     <td>@game.Name</td> *@
+                @*     <td>@game.Genre</td> *@
+                @*     <td>@game.ReleaseDate.ToString("dd.MM.yyyy")</td> *@
+                @* </tr> *@
+            }
+        }
+
+        </tbody>
+
+    </table>
+</div>
 
 @code {
-    
+    [Parameter]
+    public List<Game> Games { get; set; }
+
+    private bool _displayButtons = false;
+
+    private void DeleteGame(Game game)
+    {
+        Games.Remove(game);
+    }
 }
